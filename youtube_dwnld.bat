@@ -10,12 +10,12 @@ set /P title=
 
 echo enter artist:
 set /P artist= 
+REM       
+youtube-dl --extract-audio --audio-quality 0 --audio-format wav --socket-timeout 1 --retries infinite -o "%artist% - %title%1.%%(wav)s" %url%
 
-youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 --socket-timeout 1 --retries infinite -o "%artist% - %title%1.%%(mp3)s" %url%
+ffmpeg -i "%artist% - %title%1.wav" -codec:a libmp3lame -qscale:a 2 -metadata title="%title%" -metadata artist="%artist%" "%artist% - %title%.mp3"
+REM         -acodec copy             way more time consuming now
 
-ffmpeg -i "%artist% - %title%1.mp3" -acodec copy -metadata title="%title%" -metadata artist="%artist%" "%artist% - %title%.mp3"
-REM      -codec:a libmp3lame -qscale:a 2
-
-del "%artist% - %title%1.mp3"
+del "%artist% - %title%1.wav"
 
 pause
